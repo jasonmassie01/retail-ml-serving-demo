@@ -22,4 +22,4 @@
 - [x] Add deploy, seed, and validation scripts for GitHub-to-GCP handoff.
 - [x] Update README and deployment docs for a live GCP demo.
 - [x] Run lint, unit tests, coverage, build, Terraform checks, and browser QA.
-- [ ] Commit, push, and verify GitHub CI.
+- [x] Commit, push, and verify GitHub CI.
