@@ -35,4 +35,4 @@ CHECK-07: [PASS] Browser QA confirms desktop and mobile layouts are readable.
 
 CHECK-08: [PASS] Lint, coverage, and production build pass.
 
-CHECK-09: [PENDING] GitHub repository is created and pushed.
+CHECK-09: [PASS] GitHub repository is created and pushed.

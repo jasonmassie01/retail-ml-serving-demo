@@ -9,4 +9,4 @@
 - [x] Build the usable React demo shell and interactions.
 - [x] Add SQL/config/docs for GCP architecture without deploying resources.
 - [x] Run lint, tests, coverage, build, and browser QA.
-- [ ] Commit, push, and publish to GitHub.
+- [x] Commit, push, and publish to GitHub.
