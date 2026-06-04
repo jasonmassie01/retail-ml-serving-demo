@@ -8,6 +8,7 @@ param(
   [string]$VertexPricingEndpoint = "",
   [string]$VertexCouponEndpoint = "",
   [switch]$SkipSql,
+  [switch]$SkipAlloyDbLoad,
   [switch]$SkipSecondApply
 )
 
@@ -16,6 +17,7 @@ $repoRoot = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
 $tfRoot = Join-Path $repoRoot "infra\terraform"
 $checkScript = Join-Path $repoRoot "scripts\check-prereqs.ps1"
 $runSqlScript = Join-Path $repoRoot "scripts\run-sql.ps1"
+$runAlloyDbScript = Join-Path $repoRoot "scripts\run-alloydb-load.ps1"
 
 & $checkScript -ProjectId $ProjectId
 
@@ -46,6 +48,9 @@ docker push $image
 if (-not $SkipSecondApply) {
   terraform -chdir="$tfRoot" apply -auto-approve @terraformVars "-var=api_image=$image"
 }
+elseif (-not $SkipAlloyDbLoad) {
+  throw "AlloyDB load requires the second Terraform apply with the built API image."
+}
 
 if (-not $SkipSql) {
   & $runSqlScript `
@@ -56,6 +61,10 @@ if (-not $SkipSql) {
     -BigtableInstance "retail-features" `
     -BigtableAppProfile "serving" `
     -BigtableTable "online_features"
+}
+
+if (-not $SkipAlloyDbLoad) {
+  & $runAlloyDbScript -ProjectId $ProjectId -Region $Region
 }
 
 terraform -chdir="$tfRoot" output

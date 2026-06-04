@@ -8,7 +8,7 @@ a local emulator and deployable live service code for the same contracts.
 | Spec layer | Cloud service | Repo implementation |
 | --- | --- | --- |
 | Offline feature store | BigQuery | SQL templates, Terraform dataset, API trace |
-| Catalog and vectors | AlloyDB + ScaNN | SQL DDL plus live `AlloyDbCatalog` adapter |
+| Catalog and vectors | AlloyDB + ScaNN | Loader job plus live `AlloyDbCatalog` adapter |
 | Online feature store | Bigtable | Terraform table plus live `BigtableFeatureStore` |
 | Event stream | Pub/Sub -> BigQuery -> Bigtable | Pub/Sub API publish plus SQL CQ upgrade |
 | Model serving | Vertex AI Endpoints | live endpoint scorer plus emulator scorer |
@@ -41,6 +41,9 @@ API pipeline is implemented in `services/api/app/serving.py`.
 - `infra/sql/` materializes theLook working copies, product content, embeddings,
   features, AlloyDB schema, Bigtable reverse ETL, continuous-query examples, and
   point-in-time training examples.
+- `services/api/app/alloydb_loader.py` runs as the `retail-alloydb-loader` Cloud
+  Run Job and copies enriched BigQuery product content plus embeddings into
+  AlloyDB over the private VPC path.
 - `services/api/` is the Cloud Run service. `SERVING_MODE=live` enables real Google
   Cloud clients; `SERVING_MODE=emulator` keeps CI and local demos credential-free.
 - `src/services/servingClient.ts` sends the React app to the live API when

@@ -10,6 +10,12 @@ The repo now has two execution modes:
 ```mermaid
 flowchart LR
   UI["React demo"] --> API["Cloud Run FastAPI"]
+  Look["theLook public BQ dataset"] --> BQSeed["BQ copy + enrichment SQL"]
+  BQSeed --> BQ
+  BQSeed --> Loader["Cloud Run AlloyDB loader job"]
+  Loader --> Alloy
+  BQSeed --> BTExport["BigQuery export to Bigtable"]
+  BTExport --> BT
   API --> BQ["BigQuery feature registry + query embeddings"]
   API --> Alloy["AlloyDB products + ScaNN + FTS"]
   API --> BT["Bigtable online_features"]
@@ -22,8 +28,11 @@ flowchart LR
 
 ## Ownership
 
-- BigQuery owns feature definitions, embeddings, training sets, and online-sync SQL.
-- AlloyDB owns the serving catalog artifact and hybrid candidate retrieval.
+- BigQuery owns the copied theLook tables, enrichment, embeddings, feature
+  definitions, training sets, and online-sync SQL.
+- The AlloyDB loader job owns copying enriched product content plus embeddings into
+  the serving catalog artifact.
+- AlloyDB owns hybrid candidate retrieval after that loader has run.
 - Bigtable owns online point lookups keyed as `user#...` and `item#...`.
 - Vertex AI owns ranking, pricing, and coupon scoring endpoints.
 - Pub/Sub and BigQuery continuous queries power the live-reaction demo.

@@ -335,6 +335,61 @@ resource "google_cloud_run_v2_service" "api" {
   ]
 }
 
+resource "google_cloud_run_v2_job" "alloydb_loader" {
+  name     = "retail-alloydb-loader"
+  location = var.region
+
+  template {
+    template {
+      service_account = google_service_account.api.email
+      timeout         = "3600s"
+      max_retries     = 1
+
+      containers {
+        image   = var.api_image
+        command = ["python"]
+        args    = ["-m", "app.alloydb_loader"]
+
+        env {
+          name  = "GCP_PROJECT"
+          value = var.project_id
+        }
+        env {
+          name  = "BQ_DATASET"
+          value = google_bigquery_dataset.retail.dataset_id
+        }
+        env {
+          name  = "ALLOYDB_HOST"
+          value = google_alloydb_instance.primary.ip_address
+        }
+        env {
+          name  = "ALLOYDB_DATABASE"
+          value = var.alloydb_database
+        }
+        env {
+          name  = "ALLOYDB_USER"
+          value = var.alloydb_user
+        }
+        env {
+          name  = "ALLOYDB_PASSWORD_SECRET"
+          value = google_secret_manager_secret.alloydb_password.secret_id
+        }
+      }
+
+      vpc_access {
+        connector = google_vpc_access_connector.api.id
+        egress    = "PRIVATE_RANGES_ONLY"
+      }
+    }
+  }
+
+  depends_on = [
+    google_alloydb_instance.primary,
+    google_bigquery_table.item_features_current,
+    google_project_iam_member.api_roles,
+  ]
+}
+
 resource "google_cloud_run_service_iam_member" "public_invoker" {
   count    = var.allow_public_invoker ? 1 : 0
   service  = google_cloud_run_v2_service.api.name

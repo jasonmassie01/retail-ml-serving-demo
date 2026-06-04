@@ -1,4 +1,6 @@
--- Run in AlloyDB after loading product_content plus normalized embeddings.
+-- Reference AlloyDB catalog schema and hybrid retrieval query.
+-- The deploy flow loads product_content plus normalized embeddings through
+-- services/api/app/alloydb_loader.py running as the Cloud Run loader job.
 
 CREATE EXTENSION IF NOT EXISTS alloydb_scann CASCADE;
 

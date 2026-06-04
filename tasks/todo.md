@@ -20,6 +20,7 @@
 - [x] Promote SQL assets for data foundation, embeddings, features, and reverse ETL.
 - [x] Wire React to a live API with emulator fallback.
 - [x] Add deploy, seed, and validation scripts for GitHub-to-GCP handoff.
+- [x] Add Cloud Run Job automation to load enriched BigQuery catalog rows into AlloyDB.
 - [x] Update README and deployment docs for a live GCP demo.
 - [x] Run lint, unit tests, coverage, build, Terraform checks, and browser QA.
 - [x] Commit, push, and verify GitHub CI.

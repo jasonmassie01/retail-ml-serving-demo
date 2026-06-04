@@ -6,6 +6,10 @@ output "api_service_url" {
   value = google_cloud_run_v2_service.api.uri
 }
 
+output "alloydb_loader_job" {
+  value = google_cloud_run_v2_job.alloydb_loader.name
+}
+
 output "api_service_account" {
   value = google_service_account.api.email
 }

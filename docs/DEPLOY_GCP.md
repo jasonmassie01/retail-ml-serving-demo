@@ -33,7 +33,27 @@ $env:TF_VAR_alloydb_password = "REPLACE_WITH_STRONG_PASSWORD"
 
 The script applies Terraform once with a placeholder Cloud Run image, builds and
 pushes the FastAPI image to Artifact Registry, reapplies Cloud Run with the real
-image, and runs the batch SQL templates.
+image, runs the batch SQL templates, and executes the AlloyDB loader job.
+
+The batch SQL and loader sequence does the full serving data load:
+
+1. Copies the public `bigquery-public-data.thelook_ecommerce` tables into your
+   `retail_demo` dataset.
+2. Builds deterministic product content plus Gemini embedding tables in BigQuery.
+3. Computes item/user feature tables from the copied theLook data.
+4. Exports current item features from BigQuery to Bigtable with row keys like
+   `item#123`.
+5. Runs `retail-alloydb-loader` as a Cloud Run Job on the VPC connector so it can
+   reach the private AlloyDB instance and upsert product content plus embeddings.
+
+Use `-SkipSql` to skip the BigQuery/Bigtable SQL batch and `-SkipAlloyDbLoad` to
+skip the AlloyDB loader job.
+
+To rerun only the AlloyDB load after changing embeddings or catalog content:
+
+```powershell
+.\scripts\run-alloydb-load.ps1 -ProjectId YOUR_PROJECT -Region us-central1
+```
 
 ## Continuous Query Upgrade
 

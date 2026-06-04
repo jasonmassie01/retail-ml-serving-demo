@@ -19,6 +19,8 @@ locally does not create cloud resources.
 - BigQuery as the offline feature and embedding compute layer.
 - AlloyDB + ScaNN as the catalog/vector/full-text candidate source.
 - Bigtable-style row-keyed online features with cell timestamps and freshness SLA.
+- theLook public BigQuery data copied into a project dataset, enriched, exported to
+  Bigtable, and loaded into AlloyDB by the deployment workflow.
 - Vertex AI-style model scoring for rankers, pricing, and coupon propensity.
 - A live event stream emulator that updates item features and downstream decisions.
 - Debug visibility for hybrid search SQL, score components, latencies, and freshness.
@@ -79,6 +81,8 @@ $env:TF_VAR_alloydb_password = "REPLACE_WITH_STRONG_PASSWORD"
 - `src/domain/servingEngine.ts` implements the local shared serving pipeline.
 - `src/services/servingClient.ts` calls the live API when `VITE_API_BASE_URL` is set.
 - `services/api/` contains the FastAPI Cloud Run service and live GCP adapters.
+- `services/api/app/alloydb_loader.py` loads enriched BigQuery catalog rows and
+  embeddings into AlloyDB from the Cloud Run loader job.
 - `src/data/retailDemoData.ts` contains deterministic products, users, online features,
   and point-in-time feature history.
 - `src/components/` contains the app shell, results, navigation, and observability UI.
