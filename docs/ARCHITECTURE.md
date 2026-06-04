@@ -1,17 +1,17 @@
 # Architecture
 
-The source specification locks a Google Cloud architecture. This repo implements a local
-demo of the same contracts without provisioning cloud resources.
+The source specification locks a Google Cloud architecture. This repo implements both
+a local emulator and deployable live service code for the same contracts.
 
 ## Cloud-To-Local Mapping
 
-| Spec layer | Cloud service | Local implementation |
+| Spec layer | Cloud service | Repo implementation |
 | --- | --- | --- |
-| Offline feature store | BigQuery | deterministic feature history fixtures |
-| Catalog and vectors | AlloyDB + ScaNN | product catalog, embeddings, text tokens |
-| Online feature store | Bigtable | row-keyed feature objects with timestamps |
-| Event stream | Pub/Sub -> BigQuery -> Bigtable | local event reducer |
-| Model serving | Vertex AI Endpoints | deterministic scoring functions |
+| Offline feature store | BigQuery | SQL templates, Terraform dataset, API trace |
+| Catalog and vectors | AlloyDB + ScaNN | SQL DDL plus live `AlloyDbCatalog` adapter |
+| Online feature store | Bigtable | Terraform table plus live `BigtableFeatureStore` |
+| Event stream | Pub/Sub -> BigQuery -> Bigtable | Pub/Sub API publish plus SQL CQ upgrade |
+| Model serving | Vertex AI Endpoints | live endpoint scorer plus emulator scorer |
 | Observability | query profile and freshness checks | trace rail, debug SQL, freshness panel |
 
 ## Unified Serving Flow
@@ -23,7 +23,8 @@ Every use case runs the same stages:
 3. Bigtable-stage reads fetch `user#...` and `item#...` feature rows.
 4. Vertex AI-stage scoring ranks products or produces a bounded price/coupon decision.
 
-The pipeline is implemented in `src/domain/servingEngine.ts`.
+The local pipeline is implemented in `src/domain/servingEngine.ts`. The deployable
+API pipeline is implemented in `services/api/app/serving.py`.
 
 ## Correctness Properties
 
@@ -33,13 +34,14 @@ The pipeline is implemented in `src/domain/servingEngine.ts`.
 - Live events update feature values, timestamps, freshness, and downstream decisions.
 - Point-in-time training examples read feature history at or before the label event.
 
-## What Is Not Implemented
+## Deployable Surfaces
 
-- Real GCP resources.
-- Real Gemini embedding or image generation calls.
-- Real Vertex AI Endpoints.
-- BigQuery continuous queries.
-- Bigtable export jobs.
-
-Those surfaces are represented by the reference SQL in `infra/sql/` and by local
-emulator code that preserves the same serving contracts.
+- `infra/terraform/` provisions BigQuery, Bigtable, AlloyDB, Pub/Sub, Artifact
+  Registry, Cloud Run, IAM, networking, and secrets.
+- `infra/sql/` materializes theLook working copies, product content, embeddings,
+  features, AlloyDB schema, Bigtable reverse ETL, continuous-query examples, and
+  point-in-time training examples.
+- `services/api/` is the Cloud Run service. `SERVING_MODE=live` enables real Google
+  Cloud clients; `SERVING_MODE=emulator` keeps CI and local demos credential-free.
+- `src/services/servingClient.ts` sends the React app to the live API when
+  `VITE_API_BASE_URL` is set, otherwise it uses the local emulator.

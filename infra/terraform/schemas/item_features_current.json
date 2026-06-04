@@ -1,0 +1,15 @@
+[
+  { "name": "product_id", "type": "INTEGER", "mode": "REQUIRED" },
+  { "name": "feature_computed_at", "type": "TIMESTAMP", "mode": "REQUIRED" },
+  { "name": "item_units_sold_7d", "type": "INTEGER", "mode": "NULLABLE" },
+  { "name": "item_units_sold_30d", "type": "INTEGER", "mode": "NULLABLE" },
+  { "name": "item_views_24h", "type": "INTEGER", "mode": "NULLABLE" },
+  { "name": "item_view_to_purchase_rate", "type": "FLOAT", "mode": "NULLABLE" },
+  { "name": "item_return_rate", "type": "FLOAT", "mode": "NULLABLE" },
+  { "name": "item_avg_sale_price", "type": "FLOAT", "mode": "NULLABLE" },
+  { "name": "item_inventory_on_hand", "type": "INTEGER", "mode": "NULLABLE" },
+  { "name": "item_days_in_stock", "type": "FLOAT", "mode": "NULLABLE" },
+  { "name": "item_revenue_30d", "type": "FLOAT", "mode": "NULLABLE" },
+  { "name": "demand_slope_24h", "type": "FLOAT", "mode": "NULLABLE" },
+  { "name": "inventory_pressure", "type": "FLOAT", "mode": "NULLABLE" }
+]

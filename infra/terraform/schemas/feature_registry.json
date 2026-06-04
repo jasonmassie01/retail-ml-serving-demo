@@ -1,0 +1,9 @@
+[
+  { "name": "feature_name", "type": "STRING", "mode": "REQUIRED" },
+  { "name": "entity_type", "type": "STRING", "mode": "REQUIRED" },
+  { "name": "source_bq_table", "type": "STRING", "mode": "REQUIRED" },
+  { "name": "bq_field_name", "type": "STRING", "mode": "REQUIRED" },
+  { "name": "bigtable_qualifier", "type": "STRING", "mode": "REQUIRED" },
+  { "name": "data_type", "type": "STRING", "mode": "REQUIRED" },
+  { "name": "freshness_sla_seconds", "type": "INTEGER", "mode": "NULLABLE" }
+]

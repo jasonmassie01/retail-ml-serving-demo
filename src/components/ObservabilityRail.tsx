@@ -48,7 +48,7 @@ export function ObservabilityRail({ decision }: ObservabilityRailProps) {
 
       <div className="event-status">
         <RadioTower aria-hidden="true" />
-        <span>Event emulator</span>
+        <span>Event stream</span>
         <strong>{decision.eventCount} applied</strong>
       </div>
     </aside>

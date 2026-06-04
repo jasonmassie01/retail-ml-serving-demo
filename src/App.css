@@ -320,6 +320,16 @@
   padding: 16px;
 }
 
+.api-error {
+  border: 1px solid #f4b8b1;
+  border-radius: 8px;
+  background: #fce8e6;
+  color: #b3261e;
+  font-weight: 700;
+  margin-bottom: 14px;
+  padding: 12px 14px;
+}
+
 .debug-panel pre {
   overflow: auto;
   border-radius: 8px;

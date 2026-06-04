@@ -1,0 +1,12 @@
+[
+  { "name": "user_id", "type": "INTEGER", "mode": "REQUIRED" },
+  { "name": "feature_computed_at", "type": "TIMESTAMP", "mode": "REQUIRED" },
+  { "name": "user_aov_30d", "type": "FLOAT", "mode": "NULLABLE" },
+  { "name": "user_order_count_90d", "type": "INTEGER", "mode": "NULLABLE" },
+  { "name": "user_return_rate", "type": "FLOAT", "mode": "NULLABLE" },
+  { "name": "user_sessions_7d", "type": "INTEGER", "mode": "NULLABLE" },
+  { "name": "user_days_since_last_order", "type": "FLOAT", "mode": "NULLABLE" },
+  { "name": "user_category_affinity", "type": "STRING", "mode": "REPEATED" },
+  { "name": "user_price_tier", "type": "STRING", "mode": "NULLABLE" },
+  { "name": "coupon_propensity", "type": "FLOAT", "mode": "NULLABLE" }
+]

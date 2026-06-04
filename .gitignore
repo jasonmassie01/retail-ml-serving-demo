@@ -11,7 +11,17 @@ node_modules
 dist
 dist-ssr
 coverage
+.coverage
 *.local
+
+# Terraform runtime state
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+
+# Python runtime artifacts
+__pycache__/
+*.py[cod]
 
 # Editor directories and files
 .vscode/*

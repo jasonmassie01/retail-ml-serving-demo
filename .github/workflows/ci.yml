@@ -18,3 +18,16 @@ jobs:
       - run: npm run lint
       - run: npm run test:coverage
       - run: npm run build
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: services/api/requirements-dev.txt
+      - run: python -m pip install -r services/api/requirements-dev.txt
+      - run: python -m pytest services/api/tests --cov=services/api/app --cov-report=term-missing
+      - uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "1.15.5"
+      - run: terraform -chdir=infra/terraform fmt -check -recursive
+      - run: terraform -chdir=infra/terraform init -backend=false
+      - run: terraform -chdir=infra/terraform validate

@@ -121,6 +121,7 @@ export interface FreshnessSummary {
 }
 
 export interface ServingDecision {
+  serviceMode?: 'emulator' | 'live'
   useCase: UseCase
   results: readonly ServingResult[]
   trace: readonly ServingTraceStage[]
